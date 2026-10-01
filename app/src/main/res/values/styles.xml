@@ -2,8 +2,10 @@
     <style name="AppTheme" parent="android:style/Theme.Light.NoTitleBar">
         <item name="android:fontFamily">sans</item>
         <item name="android:colorAccent">@color/accent</item>
-        <item name="android:navigationBarColor">#111111</item>
         <item name="android:windowBackground">@color/screen_bg</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">#555555</item>
+        <item name="android:navigationBarColor">#4B4B4B</item>
+        <item name="android:windowActionModeOverlay">true</item>
     </style>
 </resources>
