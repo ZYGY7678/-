@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/screen_bg" android:layoutDirection="rtl">
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:padding="16dp" android:text="ניהול אפליקציות" android:textSize="24sp" android:textStyle="bold" />
+    <Spinner android:id="@+id/modeSpinner" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginLeft="16dp" android:layout_marginRight="16dp" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <LinearLayout android:id="@+id/appListContainer" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical" />
+    </ScrollView>
+</LinearLayout>
