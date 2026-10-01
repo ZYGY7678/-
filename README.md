@@ -15,3 +15,6 @@
 
 ## מגבלת מערכת חשובה
 ב-Android 4.4.4 אין API מודרני של UsageStats, ולכן המימוש משתמש ב-ActivityManager.getRunningTasks(). הוא מתאים ל-KitKat, אבל אינו יכול להבטיח נעילה חסינת-עקיפה מול root, Safe Mode, force-stop, הסרה של האפליקציה, או רכיבי מערכת/ROM שמגבילים ניטור משימות. לכן "100% בלתי ניתן לעקיפה" אינו אפשרי כאפליקציה רגילה ללא הרשאות מערכת/root.
+
+## Build
+GitHub Actions builds the debug APK on every push to main.
