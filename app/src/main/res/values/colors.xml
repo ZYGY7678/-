@@ -1,0 +1,8 @@
+<resources>
+    <color name="primary">#202124</color>
+    <color name="primary_dark">#111111</color>
+    <color name="accent">#1565C0</color>
+    <color name="screen_bg">#F5F6F8</color>
+    <color name="card_bg">#FFFFFF</color>
+    <color name="muted">#6B7280</color>
+</resources>
