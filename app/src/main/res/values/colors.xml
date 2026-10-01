@@ -1,8 +1,10 @@
 <resources>
-    <color name="primary">#202124</color>
-    <color name="primary_dark">#111111</color>
-    <color name="accent">#1565C0</color>
-    <color name="screen_bg">#F5F6F8</color>
-    <color name="card_bg">#FFFFFF</color>
-    <color name="muted">#6B7280</color>
+    <color name="primary">#FFFFFF</color>
+    <color name="primary_dark">#555555</color>
+    <color name="accent">#04BCD3</color>
+    <color name="screen_bg">#696969</color>
+    <color name="card_bg">#707070</color>
+    <color name="muted">#E5E5E5</color>
+    <color name="mi_header">#06BDD4</color>
+    <color name="mi_footer">#4B4B4B</color>
 </resources>
