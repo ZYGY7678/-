@@ -1,15 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:gravity="center" android:padding="24dp"
-    android:background="#FFFFFF" android:layoutDirection="rtl">
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔒" android:textSize="56sp" />
-    <TextView android:id="@+id/lockMessage" android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:gravity="center" android:textSize="20sp"
-        android:textStyle="bold" android:layout_marginTop="10dp" />
-    <EditText android:id="@+id/lockPin" android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:layout_marginTop="22dp" android:gravity="center"
-        android:inputType="numberPassword" android:maxLength="8" android:hint="PIN" />
-    <Button android:id="@+id/unlockButton" android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="פתיחה" />
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/screen_bg"
+    android:layoutDirection="rtl">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:gravity="center"
+        android:text="האפליקציה נעולה"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:background="@color/mi_header" />
+
+    <TextView
+        android:id="@+id/lockMessage"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:background="@drawable/mi_section" />
+
+    <EditText
+        android:id="@+id/lockPin"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        android:textColor="#222222"
+        android:textSize="20sp"
+        android:inputType="numberPassword"
+        android:maxLength="8"
+        android:hint="הזן PIN"
+        android:background="@drawable/mi_input"
+        android:padding="6dp" />
+
+    <Button
+        android:id="@+id/unlockButton"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        android:text="פתיחה"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:background="@drawable/mi_row" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/screen_bg" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:orientation="horizontal"
+        android:background="@drawable/mi_footer">
+
+        <TextView
+            android:id="@+id/softOk"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="✓"
+            android:textColor="@android:color/white"
+            android:textSize="25sp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <TextView
+            android:id="@+id/softBack"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="↩"
+            android:textColor="@android:color/white"
+            android:textSize="27sp"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
 </LinearLayout>
