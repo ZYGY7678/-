@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="28" />
+
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@android:drawable/ic_lock_lock"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity" android:label="@string/app_name" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:exported="false" android:name=".PinActivity" android:label="@string/app_name" android:screenOrientation="portrait" android:excludeFromRecents="true" />
+        <activity android:exported="false" android:name=".AppListActivity" android:label="ניהול אפליקציות" android:screenOrientation="portrait" />
+        <activity android:exported="false" android:name=".LockActivity" android:label="היישום נעול" android:screenOrientation="portrait" android:excludeFromRecents="true" />
+        <service android:name=".LockService" android:exported="false" android:stopWithTask="false" />
+        <receiver android:name=".BootReceiver" android:enabled="true" android:exported="true">
+            <intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /></intent-filter>
+        </receiver>
+        <receiver android:name=".DeviceAdminReceiver" android:permission="android.permission.BIND_DEVICE_ADMIN" android:exported="true">
+            <meta-data android:name="android.app.device_admin" android:resource="@xml/device_admin_receiver" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+                <action android:name="android.app.action.DEVICE_ADMIN_DISABLE_REQUESTED" />
+                <action android:name="android.app.action.DEVICE_ADMIN_DISABLED" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>
