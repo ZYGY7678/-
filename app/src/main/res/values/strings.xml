@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">נעילת אפליקציות</string>
+    <string name="service_title">נעילת אפליקציות פעילה</string>
+    <string name="service_text">הגנת PIN פעילה</string>
+</resources>
