@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/screen_bg" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="20dp" android:gravity="center_horizontal">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="🔒" android:textSize="44sp" android:layout_marginBottom="6dp" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="נעילת אפליקציות" android:textSize="27sp" android:textStyle="bold"
+            android:textColor="@color/primary" />
+        <TextView android:id="@+id/statusText" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_marginTop="8dp"
+            android:textSize="16sp" android:textColor="@color/muted" />
+        <Button android:id="@+id/manageButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="24dp"
+            android:text="ניהול אפליקציות נעולות / החרגות" />
+        <Button android:id="@+id/toggleButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="הפעל / השבת נעילה" />
+        <Button android:id="@+id/pinButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="הגדרה / שינוי PIN" />
+        <Button android:id="@+id/adminButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="הפעלת הגנת מנהל מכשיר" />
+        <Button android:id="@+id/aboutButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="אודות" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="18dp" android:textSize="13sp" android:textColor="@color/muted"
+            android:gravity="center"
+            android:text="הערה: במכשירי Android 4.4.4 אין הסתמכות על שירות נגישות. הנעילה מבוססת על ניטור האפליקציה הפעילה ברמת המערכת." />
+    </LinearLayout>
+</ScrollView>
