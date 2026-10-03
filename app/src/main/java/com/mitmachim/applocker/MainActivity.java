@@ -21,8 +21,19 @@ public class MainActivity extends Activity {
         status = (TextView)findViewById(R.id.statusText);
         CheckBox globalUnlock=(CheckBox)findViewById(R.id.globalUnlockCheck);
         final TextView globalTimer=(TextView)findViewById(R.id.globalUnlockTimerText);
+        CheckBox showNotification=(CheckBox)findViewById(R.id.showNotificationCheck);
         globalUnlock.setChecked(Prefs.isGlobalUnlock(this));
         globalUnlock.setOnCheckedChangeListener(new android.widget.CompoundButton.OnCheckedChangeListener(){ public void onCheckedChanged(android.widget.CompoundButton b, boolean checked){ Prefs.setGlobalUnlock(MainActivity.this, checked); }});
+        showNotification.setChecked(Prefs.isShowNotification(this));
+        showNotification.setOnCheckedChangeListener(new android.widget.CompoundButton.OnCheckedChangeListener(){
+            public void onCheckedChanged(android.widget.CompoundButton b, boolean checked){
+                Prefs.setShowNotification(MainActivity.this, checked);
+                if(Prefs.hasPin(MainActivity.this) && Prefs.isEnabled(MainActivity.this)){
+                    LockService.stop(MainActivity.this);
+                    LockService.ensureRunning(MainActivity.this);
+                }
+            }
+        });
         if(Prefs.isGlobalUnlockActive(this)) globalTimer.setText("חסימה מושהית: "+((Prefs.getGlobalUnlockRemaining(this)+999)/1000)+" שניות");
         ((Button)findViewById(R.id.manageButton)).setOnClickListener(new View.OnClickListener(){@Override public void onClick(View v){requirePinThenOpen(new Intent(MainActivity.this, AppListActivity.class));}});
         ((Button)findViewById(R.id.pinButton)).setOnClickListener(new View.OnClickListener(){@Override public void onClick(View v){startActivity(new Intent(MainActivity.this, PinActivity.class).putExtra("mode", Prefs.hasPin(MainActivity.this) ? "change" : "setup"));}});
