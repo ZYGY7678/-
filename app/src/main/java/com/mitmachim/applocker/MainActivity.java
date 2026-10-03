@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
     private TextView status;
@@ -19,6 +20,11 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         status = (TextView)findViewById(R.id.statusText);
+        CheckBox globalUnlock=(CheckBox)findViewById(R.id.globalUnlockCheck);
+        final TextView globalTimer=(TextView)findViewById(R.id.globalUnlockTimerText);
+        globalUnlock.setChecked(Prefs.isGlobalUnlock(this));
+        globalUnlock.setOnCheckedChangeListener(new android.widget.CompoundButton.OnCheckedChangeListener(){ public void onCheckedChanged(android.widget.CompoundButton b, boolean checked){ Prefs.setGlobalUnlock(MainActivity.this, checked); }});
+        if(Prefs.isGlobalUnlockActive(this)) globalTimer.setText("חסימה מושהית: "+((Prefs.getGlobalUnlockRemaining(this)+999)/1000)+" שניות");
         ((Button)findViewById(R.id.manageButton)).setOnClickListener(new View.OnClickListener(){@Override public void onClick(View v){requirePinThenOpen(new Intent(MainActivity.this, AppListActivity.class));}});
         ((Button)findViewById(R.id.pinButton)).setOnClickListener(new View.OnClickListener(){@Override public void onClick(View v){startActivity(new Intent(MainActivity.this, PinActivity.class).putExtra("mode", Prefs.hasPin(MainActivity.this) ? "change" : "setup"));}});
         ((Button)findViewById(R.id.toggleButton)).setOnClickListener(new View.OnClickListener(){@Override public void onClick(View v){if(!Prefs.hasPin(MainActivity.this)){startActivity(new Intent(MainActivity.this, PinActivity.class).putExtra("mode","setup"));}else startActivity(new Intent(MainActivity.this, PinActivity.class).putExtra("mode","verify_toggle"));}});
