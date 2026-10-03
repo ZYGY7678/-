@@ -22,10 +22,30 @@ public class LockService extends Service {
     public static void grantTemporaryUnlock(Context c,String packageName){Prefs.setTemporaryUnlock(c,packageName);ensureRunning(c);}
     @Override public void onCreate(){super.onCreate();startAsForeground();handler.post(checker);}
     private void startAsForeground(){
-        Intent launch=new Intent(this,MainActivity.class);PendingIntent pending=PendingIntent.getActivity(this,0,launch,PendingIntent.FLAG_UPDATE_CURRENT);Notification.Builder b;
-        if(Build.VERSION.SDK_INT>=26){NotificationManager nm=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);android.app.NotificationChannel ch=new android.app.NotificationChannel("locker","נעילת אפליקציות",NotificationManager.IMPORTANCE_LOW);nm.createNotificationChannel(ch);b=new Notification.Builder(this,"locker");}
-        else b=new Notification.Builder(this);
-        b.setSmallIcon(android.R.drawable.ic_lock_lock).setContentTitle(getString(R.string.service_title)).setContentText(getString(R.string.service_text)).setContentIntent(pending).setOngoing(true);startForeground(NOTIFICATION_ID,b.build());
+        Intent launch=new Intent(this,MainActivity.class);
+        PendingIntent pending=PendingIntent.getActivity(this,0,launch,PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification.Builder b;
+        if(Build.VERSION.SDK_INT>=26){
+            NotificationManager nm=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+            android.app.NotificationChannel ch=new android.app.NotificationChannel("locker","נעילת אפליקציות",NotificationManager.IMPORTANCE_LOW);
+            nm.createNotificationChannel(ch);
+            b=new Notification.Builder(this,"locker");
+        } else {
+            b=new Notification.Builder(this);
+        }
+        b.setSmallIcon(android.R.drawable.ic_lock_lock)
+         .setContentTitle(getString(R.string.service_title))
+         .setContentText(getString(R.string.service_text))
+         .setContentIntent(pending)
+         .setOngoing(true);
+        startForeground(NOTIFICATION_ID,b.build());
+
+        // On Android 4.4 and earlier, the foreground-service notification can be
+        // removed after the service has been started. Newer Android versions
+        // may require a visible foreground-service notification.
+        if(Build.VERSION.SDK_INT < 26 && !Prefs.isShowNotification(this)){
+            stopForeground(true);
+        }
     }
     private void enforceLock(){
         if(!Prefs.isEnabled(this)||!Prefs.hasPin(this))return;
