@@ -14,6 +14,8 @@ public final class Prefs {
     private static final String KEY_EXCLUDED_APPS = "excluded_apps";
     private static final String KEY_TEMP_UNLOCK = "temp_unlock";
     private static final String KEY_AUTO_PIN = "auto_pin";
+    private static final String KEY_GLOBAL_UNLOCK_UNTIL = "global_unlock_until";
+    private static final String KEY_GLOBAL_UNLOCK = "global_unlock";
     public static final String MODE_SELECTED = "selected";
     public static final String MODE_ALL_EXCEPT = "all_except";
     private Prefs() {}
@@ -35,4 +37,9 @@ public final class Prefs {
     public static void setTemporaryUnlock(Context c, String pkg) { sp(c).edit().putString(KEY_TEMP_UNLOCK, pkg == null ? "" : pkg).apply(); }
     public static boolean isAutoPin(Context c) { return sp(c).getBoolean(KEY_AUTO_PIN, true); }
     public static void setAutoPin(Context c, boolean value) { sp(c).edit().putBoolean(KEY_AUTO_PIN, value).apply(); }
+    public static boolean isGlobalUnlock(Context c) { return sp(c).getBoolean(KEY_GLOBAL_UNLOCK, true); }
+    public static void setGlobalUnlock(Context c, boolean value) { sp(c).edit().putBoolean(KEY_GLOBAL_UNLOCK, value).apply(); }
+    public static void startGlobalUnlock(Context c, long durationMs) { sp(c).edit().putLong(KEY_GLOBAL_UNLOCK_UNTIL, System.currentTimeMillis()+durationMs).apply(); }
+    public static boolean isGlobalUnlockActive(Context c) { return sp(c).getLong(KEY_GLOBAL_UNLOCK_UNTIL, 0L) > System.currentTimeMillis(); }
+    public static long getGlobalUnlockRemaining(Context c) { return Math.max(0L, sp(c).getLong(KEY_GLOBAL_UNLOCK_UNTIL, 0L)-System.currentTimeMillis()); }
 }
