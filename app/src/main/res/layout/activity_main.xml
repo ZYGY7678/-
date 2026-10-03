@@ -38,6 +38,12 @@
                 android:textColor="@color/primary"/>
             <CheckBox android:id="@+id/globalUnlockCheck" android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:text="ביטול חסימה לכל האפליקציות לדקה אחרי PIN" android:textColor="@color/primary"/>
+            <CheckBox android:id="@+id/showNotificationCheck" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="הצג התראה בשורת ההתראות" android:textColor="@color/primary"/>
+            <TextView android:id="@+id/notificationHelpText" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:gravity="right" android:textSize="12sp"
+                android:textColor="@color/muted"
+                android:text="כבוי = לא להציג את ההתראה, ככל שהגרסה של Android מאפשרת. בגרסאות חדשות יותר שירות קדמי עשוי לחייב התראה."/>
             <TextView android:id="@+id/globalUnlockTimerText" android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:gravity="right" android:textSize="13sp"
                 android:textColor="@color/muted"/>
