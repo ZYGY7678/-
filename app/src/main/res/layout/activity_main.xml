@@ -4,31 +4,48 @@
     android:background="@color/screen_bg" android:fillViewport="true">
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="vertical" android:padding="20dp" android:gravity="center_horizontal">
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="🔒" android:textSize="44sp" android:layout_marginBottom="6dp" />
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="נעילת אפליקציות" android:textSize="27sp" android:textStyle="bold"
-            android:textColor="@color/primary" />
-        <TextView android:id="@+id/statusText" android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_marginTop="8dp"
-            android:textSize="16sp" android:textColor="@color/muted" />
-        <Button android:id="@+id/manageButton" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:layout_marginTop="24dp"
-            android:text="ניהול אפליקציות נעולות / החרגות" />
-        <Button android:id="@+id/toggleButton" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="הפעל / השבת נעילה" />
-        <Button android:id="@+id/pinButton" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="הגדרה / שינוי PIN" />
-        <Button android:id="@+id/adminButton" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="הפעלת הגנת מנהל מכשיר" />
-        <Button android:id="@+id/aboutButton" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="אודות" />
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:layout_marginTop="18dp" android:textSize="13sp" android:textColor="@color/muted"
-            android:gravity="center"
-            android:text="הערה: במכשירי Android 4.4.4 אין הסתמכות על שירות נגישות. הנעילה מבוססת על ניטור האפליקציה הפעילה ברמת המערכת." />
-        <CheckBox android:id="@+id/autoPinCheck" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="בדיקת PIN אוטומטית אחרי 4 ספרות" android:checked="true" />
-    <CheckBox android:id="@+id/globalUnlockCheck" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="ביטול חסימה לכל האפליקציות לדקה אחרי PIN" android:checked="true" />
-    <TextView android:id="@+id/globalUnlockTimerText" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:textSize="13sp" android:textColor="@color/muted" />
-</LinearLayout>
+            android:text="נעילת אפליקציות" android:textSize="30sp" android:textStyle="bold"
+            android:textColor="@color/primary" android:gravity="right" android:paddingBottom="4dp"/>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="שליטה פשוטה ומאובטחת באפליקציות שלך" android:textSize="14sp"
+            android:textColor="@color/muted" android:gravity="right" android:paddingBottom="16dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:background="@color/card_bg" android:padding="18dp">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="מצב ההגנה" android:textStyle="bold" android:textSize="18sp"
+                android:textColor="@color/primary" android:gravity="right"/>
+            <TextView android:id="@+id/statusText" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="6dp"
+                android:textSize="16sp" android:textColor="@color/accent" android:gravity="right"/>
+        </LinearLayout>
+        <Button android:id="@+id/manageButton" android:layout_width="match_parent" android:layout_height="52dp"
+            android:layout_marginTop="14dp" android:text="ניהול אפליקציות" android:textSize="16sp"/>
+        <Button android:id="@+id/toggleButton" android:layout_width="match_parent" android:layout_height="52dp"
+            android:text="הפעל / השבת נעילה" android:textSize="16sp"/>
+        <Button android:id="@+id/pinButton" android:layout_width="match_parent" android:layout_height="52dp"
+            android:text="הגדרה / שינוי PIN" android:textSize="16sp"/>
+        <Button android:id="@+id/adminButton" android:layout_width="match_parent" android:layout_height="52dp"
+            android:text="הגנת מנהל מכשיר" android:textSize="16sp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:background="@color/card_bg" android:padding="14dp"
+            android:layout_marginTop="12dp">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="הגדרות חכמות" android:textStyle="bold" android:textSize="18sp"
+                android:textColor="@color/primary" android:gravity="right"/>
+            <CheckBox android:id="@+id/autoPinCheck" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="6dp" android:text="בדיקת PIN אוטומטית אחרי 4 ספרות"
+                android:textColor="@color/primary"/>
+            <CheckBox android:id="@+id/globalUnlockCheck" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="ביטול חסימה לכל האפליקציות לדקה אחרי PIN" android:textColor="@color/primary"/>
+            <TextView android:id="@+id/globalUnlockTimerText" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:gravity="right" android:textSize="13sp"
+                android:textColor="@color/muted"/>
+        </LinearLayout>
+        <Button android:id="@+id/aboutButton" android:layout_width="match_parent" android:layout_height="50dp"
+            android:layout_marginTop="12dp" android:text="אודות" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="14dp" android:textSize="12sp" android:textColor="@color/muted"
+            android:gravity="center" android:text="Android 4.4.4 ומעלה • ללא שירות נגישות"/>
+    </LinearLayout>
 </ScrollView>
