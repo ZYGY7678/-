@@ -21,7 +21,9 @@ public class LockActivity extends Activity {
         pin.addTextChangedListener(new TextWatcher(){ public void beforeTextChanged(CharSequence s,int st,int c,int a){} public void onTextChanged(CharSequence s,int st,int before,int count){ if(Prefs.isAutoPin(LockActivity.this) && s.length()==4) verify(); } public void afterTextChanged(Editable e){} });
         pin.requestFocus();
     }
-    private void verify(){String entered=pin.getText().toString();if(SecurityUtil.sha256(entered).equals(Prefs.getPinHash(this))){LockService.grantTemporaryUnlock(this,targetPackage);launchTarget();finish();}else{pin.setText("");Toast.makeText(this,"PIN שגוי",Toast.LENGTH_SHORT).show();}}
+    private void verify(){String entered=pin.getText().toString();if(SecurityUtil.sha256(entered).equals(Prefs.getPinHash(this))){LockService.grantTemporaryUnlock(this,targetPackage);
+            if(Prefs.isGlobalUnlock(this)) Prefs.startGlobalUnlock(this,60000L);
+            launchTarget();finish();}else{pin.setText("");Toast.makeText(this,"PIN שגוי",Toast.LENGTH_SHORT).show();}}
     private void launchTarget(){try{Intent launch=getPackageManager().getLaunchIntentForPackage(targetPackage);if(launch!=null){launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);startActivity(launch);}}catch(Throwable ignored){}}
     @Override public void onBackPressed(){Intent home=new Intent(Intent.ACTION_MAIN);home.addCategory(Intent.CATEGORY_HOME);home.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);startActivity(home);}
 }
