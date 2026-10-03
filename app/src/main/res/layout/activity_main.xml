@@ -28,5 +28,7 @@
             android:gravity="center"
             android:text="הערה: במכשירי Android 4.4.4 אין הסתמכות על שירות נגישות. הנעילה מבוססת על ניטור האפליקציה הפעילה ברמת המערכת." />
         <CheckBox android:id="@+id/autoPinCheck" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="בדיקת PIN אוטומטית אחרי 4 ספרות" android:checked="true" />
+    <CheckBox android:id="@+id/globalUnlockCheck" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="ביטול חסימה לכל האפליקציות לדקה אחרי PIN" android:checked="true" />
+    <TextView android:id="@+id/globalUnlockTimerText" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:textSize="13sp" android:textColor="@color/muted" />
 </LinearLayout>
 </ScrollView>
