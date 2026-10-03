@@ -13,6 +13,7 @@ public final class Prefs {
     private static final String KEY_LOCKED_APPS = "locked_apps";
     private static final String KEY_EXCLUDED_APPS = "excluded_apps";
     private static final String KEY_TEMP_UNLOCK = "temp_unlock";
+    private static final String KEY_AUTO_PIN = "auto_pin";
     public static final String MODE_SELECTED = "selected";
     public static final String MODE_ALL_EXCEPT = "all_except";
     private Prefs() {}
@@ -32,4 +33,6 @@ public final class Prefs {
     public static void setActiveAppSet(Context c, Set<String> apps) { if (MODE_ALL_EXCEPT.equals(getMode(c))) setExcludedApps(c, apps); else setLockedApps(c, apps); }
     public static String getTemporaryUnlock(Context c) { return sp(c).getString(KEY_TEMP_UNLOCK, ""); }
     public static void setTemporaryUnlock(Context c, String pkg) { sp(c).edit().putString(KEY_TEMP_UNLOCK, pkg == null ? "" : pkg).apply(); }
+    public static boolean isAutoPin(Context c) { return sp(c).getBoolean(KEY_AUTO_PIN, true); }
+    public static void setAutoPin(Context c, boolean value) { sp(c).edit().putBoolean(KEY_AUTO_PIN, value).apply(); }
 }
