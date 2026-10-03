@@ -27,5 +27,6 @@
             android:layout_marginTop="18dp" android:textSize="13sp" android:textColor="@color/muted"
             android:gravity="center"
             android:text="הערה: במכשירי Android 4.4.4 אין הסתמכות על שירות נגישות. הנעילה מבוססת על ניטור האפליקציה הפעילה ברמת המערכת." />
-    </LinearLayout>
+        <CheckBox android:id="@+id/autoPinCheck" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="בדיקת PIN אוטומטית אחרי 4 ספרות" android:checked="true" />
+</LinearLayout>
 </ScrollView>
