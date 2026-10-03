@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +25,7 @@ public class PinActivity extends Activity {
         else if("change".equals(mode)){title.setText("שינוי קוד PIN");hint.setText("הזן את הקוד הנוכחי ולאחר מכן קוד חדש");pin1.setHint("קוד נוכחי");pin2.setHint("קוד חדש");}
         else {title.setText("נדרש קוד PIN");hint.setText("הזן את הקוד כדי להמשיך");pin2.setVisibility(View.GONE);save.setText("אישור");}
         save.setOnClickListener(new View.OnClickListener(){@Override public void onClick(View v){submit();}});
+        pin1.addTextChangedListener(new TextWatcher(){ public void beforeTextChanged(CharSequence s,int st,int c,int a){} public void onTextChanged(CharSequence s,int st,int before,int count){ if(Prefs.isAutoPin(PinActivity.this) && pin2.getVisibility()!=View.VISIBLE && s.length()==4) submit(); } public void afterTextChanged(Editable e){} });
     }
     private void submit(){
         String a=pin1.getText().toString(),b=pin2.getText().toString();
