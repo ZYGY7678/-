@@ -29,6 +29,7 @@ public class LockService extends Service {
     }
     private void enforceLock(){
         if(!Prefs.isEnabled(this)||!Prefs.hasPin(this))return;
+        if(Prefs.isGlobalUnlock(this) && Prefs.isGlobalUnlockActive(this)) return;
         ActivityManager am=(ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
         try{
             ActivityManager.RunningTaskInfo task=am.getRunningTasks(1).get(0);String top=task.topActivity==null?"":task.topActivity.getPackageName();String own=getPackageName();
