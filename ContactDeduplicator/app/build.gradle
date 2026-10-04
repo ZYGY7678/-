@@ -1,0 +1,16 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.zygy7678.contactdeduplicator'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.zygy7678.contactdeduplicator'
+        minSdk 19
+        targetSdk 35
+        versionCode 1
+        versionName '1.0'
+    }
+}
