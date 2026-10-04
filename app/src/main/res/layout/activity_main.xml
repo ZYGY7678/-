@@ -27,6 +27,9 @@
             android:text="הגדרה / שינוי PIN" android:textSize="16sp"/>
         <Button android:id="@+id/adminButton" android:layout_width="match_parent" android:layout_height="52dp"
             android:text="הגנת מנהל מכשיר" android:textSize="16sp"/>
+        <Button android:id="@+id/accessibilityButton" android:layout_width="match_parent" android:layout_height="52dp"
+            android:layout_marginTop="10dp" android:text="הפעלת שירות נגישות" android:textSize="16sp"/>
+
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
             android:orientation="vertical" android:background="@color/card_bg" android:padding="14dp"
             android:layout_marginTop="12dp">
@@ -44,14 +47,13 @@
                 android:layout_height="wrap_content" android:gravity="right" android:textSize="12sp"
                 android:textColor="@color/muted"
                 android:text="כבוי = לא להציג את ההתראה, ככל שהגרסה של Android מאפשרת. בגרסאות חדשות יותר שירות קדמי עשוי לחייב התראה."/>
-            <TextView android:id="@+id/globalUnlockTimerText" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:gravity="right" android:textSize="13sp"
-                android:textColor="@color/muted"/>
+            <TextView android:id="@+id/globalUnlockTimerText" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:gravity="right" android:textSize="13sp" android:textColor="@color/muted"/>
         </LinearLayout>
         <Button android:id="@+id/aboutButton" android:layout_width="match_parent" android:layout_height="50dp"
             android:layout_marginTop="12dp" android:text="אודות" />
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
             android:layout_marginTop="14dp" android:textSize="12sp" android:textColor="@color/muted"
-            android:gravity="center" android:text="Android 4.4.4 ומעלה • ללא שירות נגישות"/>
+            android:gravity="center" android:text="Android 4.4.4 ומעלה • נגישות + מנגנון גיבוי"/>
     </LinearLayout>
 </ScrollView>
