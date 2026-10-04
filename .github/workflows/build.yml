@@ -1,4 +1,5 @@
 name: Build Android 4.4.4 APK
+# Manual rebuild requested
 
 on:
   push:
