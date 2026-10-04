@@ -139,32 +139,49 @@ public class MainActivity extends Activity {
     private List<ContactInfo> findDuplicateGroups() {
         ContentResolver resolver = getContentResolver();
         Map<Long, ContactInfo> contacts = new HashMap<Long, ContactInfo>();
+        Map<String, Set<Long>> phoneBuckets = new HashMap<String, Set<Long>>();
 
         Cursor cursor = resolver.query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                ContactsContract.Data.CONTENT_URI,
                 new String[] {
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
-                        ContactsContract.CommonDataKinds.Phone.NUMBER,
+                        ContactsContract.Data.CONTACT_ID,
+                        ContactsContract.Data.RAW_CONTACT_ID,
+                        ContactsContract.Data.MIMETYPE,
+                        ContactsContract.Data.DATA1,
                         ContactsContract.Contacts.DISPLAY_NAME
                 },
-                null, null, null
+                ContactsContract.Data.MIMETYPE + "=?",
+                new String[] { ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE },
+                null
         );
 
         if (cursor == null) return new ArrayList<ContactInfo>();
 
         try {
             while (cursor.moveToNext()) {
-                long id = cursor.getLong(0);
-                String number = cursor.getString(1);
-                String name = cursor.getString(2);
-                if (number == null) continue;
+                long contactId = cursor.getLong(0);
+                String number = cursor.getString(3);
+                String name = cursor.getString(4);
+                if (number == null || number.trim().length() == 0) continue;
 
-                ContactInfo info = contacts.get(id);
+                ContactInfo info = contacts.get(contactId);
                 if (info == null) {
-                    info = new ContactInfo(id, name == null ? "" : name);
-                    contacts.put(id, info);
+                    info = new ContactInfo(contactId, name == null ? "" : name);
+                    contacts.put(contactId, info);
                 }
-                info.numbers.add(number);
+
+                if (!containsNumber(info.numbers, number)) {
+                    info.numbers.add(number);
+                }
+
+                for (String key : phoneKeys(number)) {
+                    Set<Long> ids = phoneBuckets.get(key);
+                    if (ids == null) {
+                        ids = new HashSet<Long>();
+                        phoneBuckets.put(key, ids);
+                    }
+                    ids.add(contactId);
+                }
             }
         } finally {
             cursor.close();
@@ -174,10 +191,54 @@ public class MainActivity extends Activity {
         if (all.size() < 2) return new ArrayList<ContactInfo>();
 
         UnionFind uf = new UnionFind(all.size());
+        Map<Long, Integer> indexByContactId = new HashMap<Long, Integer>();
+
         for (int i = 0; i < all.size(); i++) {
-            for (int j = i + 1; j < all.size(); j++) {
-                if (sharePhone(all.get(i), all.get(j))) {
-                    uf.union(i, j);
+            indexByContactId.put(all.get(i).id, i);
+        }
+
+        // First pass: exact canonical matches. This catches formatting differences
+        // such as spaces, dashes, parentheses, +972 vs 00972, and Israeli 05x vs +9725x.
+        for (Set<Long> ids : phoneBuckets.values()) {
+            if (ids.size() < 2) continue;
+            Long first = null;
+            for (Long id : ids) {
+                if (first == null) {
+                    first = id;
+                } else {
+                    Integer a = indexByContactId.get(first);
+                    Integer b = indexByContactId.get(id);
+                    if (a != null && b != null) uf.union(a, b);
+                }
+            }
+        }
+
+        // Second pass: Android's own phone-number equivalence, restricted to
+        // contacts sharing a useful digit suffix so large contact lists stay fast.
+        Map<String, List<Integer>> suffixBuckets = new HashMap<String, List<Integer>>();
+        for (int i = 0; i < all.size(); i++) {
+            for (String number : all.get(i).numbers) {
+                String digits = digitsOnly(number);
+                if (digits.length() < 7) continue;
+                String suffix = digits.substring(digits.length() - 7);
+                List<Integer> ids = suffixBuckets.get(suffix);
+                if (ids == null) {
+                    ids = new ArrayList<Integer>();
+                    suffixBuckets.put(suffix, ids);
+                }
+                if (!ids.contains(i)) ids.add(i);
+            }
+        }
+
+        for (List<Integer> ids : suffixBuckets.values()) {
+            if (ids.size() < 2) continue;
+            for (int a = 0; a < ids.size(); a++) {
+                ContactInfo first = all.get(ids.get(a));
+                for (int b = a + 1; b < ids.size(); b++) {
+                    ContactInfo second = all.get(ids.get(b));
+                    if (sharePhone(first, second)) {
+                        uf.union(ids.get(a), ids.get(b));
+                    }
                 }
             }
         }
@@ -201,7 +262,8 @@ public class MainActivity extends Activity {
 
         List<ContactInfo> result = new ArrayList<ContactInfo>();
         for (Map.Entry<Integer, ContactInfo> entry : grouped.entrySet()) {
-            if (counts.get(entry.getKey()) != null && counts.get(entry.getKey()) > 1) {
+            Integer count = counts.get(entry.getKey());
+            if (count != null && count > 1) {
                 ContactInfo g = entry.getValue();
                 Collections.sort(g.memberNames);
                 result.add(g);
@@ -216,10 +278,65 @@ public class MainActivity extends Activity {
         return result;
     }
 
+    private boolean containsNumber(List<String> numbers, String candidate) {
+        for (String number : numbers) {
+            if (PhoneNumberUtils.compare(number, candidate)) return true;
+            if (canonicalPhone(number).equals(canonicalPhone(candidate))) return true;
+        }
+        return false;
+    }
+
+    private List<String> phoneKeys(String number) {
+        List<String> keys = new ArrayList<String>();
+        String digits = digitsOnly(number);
+        String canonical = canonicalPhone(number);
+        if (digits.length() > 0 && !keys.contains(digits)) keys.add(digits);
+        if (canonical.length() > 0 && !keys.contains(canonical)) keys.add(canonical);
+
+        // International dialing form without the international access prefix.
+        if (digits.startsWith("00") && digits.length() > 2) {
+            String k = digits.substring(2);
+            if (!keys.contains(k)) keys.add(k);
+        }
+
+        return keys;
+    }
+
+    private String canonicalPhone(String number) {
+        String digits = digitsOnly(number);
+        if (digits.length() == 0) return "";
+
+        if (digits.startsWith("00") && digits.length() > 2) {
+            digits = digits.substring(2);
+        }
+
+        // Israel: treat 05x1234567 and +972 5x1234567 as the same number.
+        if (digits.startsWith("0") && digits.length() == 10) {
+            return "972" + digits.substring(1);
+        }
+        if (digits.startsWith("972") && digits.length() == 12) {
+            return digits;
+        }
+
+        return digits;
+    }
+
+    private String digitsOnly(String number) {
+        String digits = PhoneNumberUtils.normalizeNumber(number);
+        if (digits == null) return "";
+        StringBuilder out = new StringBuilder();
+        for (int i = 0; i < digits.length(); i++) {
+            char c = digits.charAt(i);
+            if (c >= '0' && c <= '9') out.append(c);
+        }
+        return out.toString();
+    }
+
     private boolean sharePhone(ContactInfo a, ContactInfo b) {
         for (String first : a.numbers) {
             for (String second : b.numbers) {
                 if (PhoneNumberUtils.compare(first, second)) return true;
+                if (canonicalPhone(first).equals(canonicalPhone(second))) return true;
             }
         }
         return false;
