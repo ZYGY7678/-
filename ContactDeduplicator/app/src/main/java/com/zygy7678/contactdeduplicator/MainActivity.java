@@ -110,12 +110,17 @@ public class MainActivity extends Activity {
 
         ScrollView scroll = new ScrollView(this);
         scroll.setFillViewport(true);
+        LinearLayout content = new LinearLayout(this);
+        content.setOrientation(LinearLayout.VERTICAL);
+        content.setPadding(0, 0, 0, 8);
+        content.setGravity(Gravity.RIGHT);
+        content.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+
         listLayout = new LinearLayout(this);
         listLayout.setOrientation(LinearLayout.VERTICAL);
         listLayout.setGravity(Gravity.RIGHT);
         listLayout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        scroll.addView(listLayout, new ScrollView.LayoutParams(-1, -2));
-        root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1f));
+        content.addView(listLayout, new LinearLayout.LayoutParams(-1, -2));
 
         mergeButton = new Button(this);
         mergeButton.setText("🔗  מזג את כל הקבוצות");
@@ -126,7 +131,7 @@ public class MainActivity extends Activity {
                 confirmMerge();
             }
         });
-        root.addView(mergeButton, new LinearLayout.LayoutParams(-1, -2));
+        content.addView(mergeButton, new LinearLayout.LayoutParams(-1, -2));
 
         TextView warning = new TextView(this);
         warning.setText("⚠ לפני המיזוג: הפעולה משנה את אנשי הקשר ומוחקת את העותקים לאחר העברת המידע.");
@@ -134,7 +139,10 @@ public class MainActivity extends Activity {
         warning.setTextColor(Color.rgb(120, 70, 0));
         warning.setGravity(Gravity.RIGHT);
         warning.setPadding(8, 8, 8, 0);
-        root.addView(warning, new LinearLayout.LayoutParams(-1, -2));
+        content.addView(warning, new LinearLayout.LayoutParams(-1, -2));
+
+        scroll.addView(content, new ScrollView.LayoutParams(-1, -2));
+        root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1f));
 
         setContentView(root);
     }
@@ -157,11 +165,52 @@ public class MainActivity extends Activity {
     private void confirmMerge() {
         if (duplicateGroups.isEmpty()) return;
 
+        LinearLayout preview = new LinearLayout(this);
+        preview.setOrientation(LinearLayout.VERTICAL);
+        preview.setPadding(28, 8, 28, 4);
+        preview.setGravity(Gravity.RIGHT);
+        preview.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+
+        TextView intro = new TextView(this);
+        intro.setText("בדוק מה עומד להשתנות לפני המיזוג:");
+        intro.setTextSize(16);
+        intro.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        intro.setGravity(Gravity.RIGHT);
+        preview.addView(intro, new LinearLayout.LayoutParams(-1, -2));
+
+        int index = 1;
+        for (ContactInfo group : duplicateGroups) {
+            TextView item = new TextView(this);
+            String before = joinNames(group.memberNames);
+            String after = before;
+            item.setText("קבוצה " + index + "  •  " + group.memberIds.size() + " אנשי קשר\n" +
+                    "לפני: " + before + "\n" +
+                    "אחרי: " + after + "\n" +
+                    "מספרים: " + joinUniqueNumbers(group.numbers));
+            item.setTextSize(15);
+            item.setTextColor(Color.rgb(45, 45, 45));
+            item.setGravity(Gravity.RIGHT);
+            item.setPadding(14, 14, 14, 14);
+
+            GradientDrawable bg = new GradientDrawable();
+            bg.setColor(Color.WHITE);
+            bg.setCornerRadius(14);
+            bg.setStroke(1, Color.rgb(220, 220, 220));
+            item.setBackground(bg);
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+            lp.setMargins(0, 8, 0, 8);
+            preview.addView(item, lp);
+            index++;
+        }
+
+        ScrollView previewScroll = new ScrollView(this);
+        previewScroll.setFillViewport(false);
+        previewScroll.addView(preview, new ScrollView.LayoutParams(-1, -2));
+
         new AlertDialog.Builder(this)
-                .setTitle("למזג את כל הכפילויות?")
-                .setMessage("נמצאו " + duplicateGroups.size() + " קבוצות כפולות.\n\n" +
-                        "כל קבוצה תהפוך לאיש קשר אחד. המידע מאנשי הקשר האחרים יועתק לאיש הקשר שנשמר, ולאחר מכן העותקים יימחקו.\n\n" +
-                        "מומלץ לוודא שיש לך גיבוי של אנשי הקשר לפני המשך.")
+                .setTitle("בדיקת המיזוג")
+                .setView(previewScroll)
                 .setNegativeButton("ביטול", null)
                 .setPositiveButton("כן, מזג", new android.content.DialogInterface.OnClickListener() {
                     @Override public void onClick(android.content.DialogInterface dialog, int which) {
@@ -448,9 +497,10 @@ public class MainActivity extends Activity {
         for (ContactInfo group : duplicateGroups) {
             TextView row = card(
                     "קבוצה " + index + "  •  " + group.memberIds.size() + " אנשי קשר",
-                    "שמות: " + joinNames(group.memberNames) +
+                    "לפני: " + joinNames(group.memberNames) +
                     "\nמספרים: " + joinUniqueNumbers(group.numbers) +
-                    "\n\n→ בעת המיזוג יישאר איש קשר אחד עם המידע שניתן להעביר מכל הקבוצה."
+                    "\n\nאחרי: " + joinNames(group.memberNames) +
+                    "\n→ יישאר איש קשר אחד בשם שמופיע בשורת «אחרי»."
             );
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
             lp.setMargins(0, 0, 0, 10);
