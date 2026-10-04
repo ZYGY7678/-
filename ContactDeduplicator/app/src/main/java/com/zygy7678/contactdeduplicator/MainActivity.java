@@ -2,6 +2,7 @@ package com.zygy7678.contactdeduplicator;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.pm.PackageManager;
@@ -11,6 +12,9 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.PhoneNumberUtils;
 import android.view.Gravity;
+import android.graphics.Typeface;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -55,22 +59,39 @@ public class MainActivity extends Activity {
     private void buildUi() {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setPadding(24, 24, 24, 24);
+        root.setPadding(20, 18, 20, 18);
+        root.setBackgroundColor(Color.rgb(248, 249, 250));
+        root.setGravity(Gravity.RIGHT);
+        root.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
 
         TextView title = new TextView(this);
-        title.setText("מנקה אנשי קשר כפולים");
-        title.setTextSize(22);
-        title.setGravity(Gravity.CENTER);
+        title.setText("ניקוי אנשי קשר כפולים");
+        title.setTextSize(25);
+        title.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        title.setTextColor(Color.rgb(30, 30, 30));
+        title.setGravity(Gravity.RIGHT);
         root.addView(title, new LinearLayout.LayoutParams(-1, -2));
 
-        TextView rule = new TextView(this);
-        rule.setText("כפילויות נקבעות לפי מספר טלפון זהה, גם כאשר השמות שונים. בעת מיזוג נשמרים פרטי שני אנשי הקשר.");
-        rule.setTextSize(16);
-        rule.setPadding(0, 20, 0, 20);
-        root.addView(rule, new LinearLayout.LayoutParams(-1, -2));
+        TextView subtitle = new TextView(this);
+        subtitle.setText("מצא כפילויות • בדוק • מזג");
+        subtitle.setTextSize(15);
+        subtitle.setTextColor(Color.DKGRAY);
+        subtitle.setPadding(0, 4, 0, 14);
+        root.addView(subtitle, new LinearLayout.LayoutParams(-1, -2));
+
+        TextView explanation = card(
+                "איך זה עובד?",
+                "האפליקציה מחפשת אנשי קשר שיש ביניהם אותו מספר טלפון.\n\n" +
+                "✓ גם אם השמות שונים — הם נחשבים כפולים.\n" +
+                "✓ רווחים, מקפים וסוגריים במספר לא משנים.\n" +
+                "✓ מספר ישראלי כמו 050... מזוהה גם כ־+97250...\n" +
+                "✓ במיזוג נשמרים פרטי אנשי הקשר, כולל מספרים ופרטים נוספים."
+        );
+        root.addView(explanation, new LinearLayout.LayoutParams(-1, -2));
 
         Button scanButton = new Button(this);
-        scanButton.setText("מצא כפילויות");
+        scanButton.setText("🔎  סרוק ומצא כפילויות");
+        scanButton.setTextSize(17);
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 scan();
@@ -78,28 +99,76 @@ public class MainActivity extends Activity {
         });
         root.addView(scanButton, new LinearLayout.LayoutParams(-1, -2));
 
+        status = new TextView(this);
+        status.setText("מוכן לסריקה");
+        status.setTextSize(17);
+        status.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        status.setTextColor(Color.rgb(40, 40, 40));
+        status.setGravity(Gravity.RIGHT);
+        status.setPadding(0, 14, 0, 8);
+        root.addView(status, new LinearLayout.LayoutParams(-1, -2));
+
+        ScrollView scroll = new ScrollView(this);
+        scroll.setFillViewport(true);
+        listLayout = new LinearLayout(this);
+        listLayout.setOrientation(LinearLayout.VERTICAL);
+        listLayout.setGravity(Gravity.RIGHT);
+        listLayout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        scroll.addView(listLayout, new ScrollView.LayoutParams(-1, -2));
+        root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1f));
+
         mergeButton = new Button(this);
-        mergeButton.setText("מזג את כל הכפילויות");
+        mergeButton.setText("🔗  מזג את כל הקבוצות");
+        mergeButton.setTextSize(17);
         mergeButton.setEnabled(false);
         mergeButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                mergeAll();
+                confirmMerge();
             }
         });
         root.addView(mergeButton, new LinearLayout.LayoutParams(-1, -2));
 
-        status = new TextView(this);
-        status.setTextSize(16);
-        status.setPadding(0, 20, 0, 10);
-        root.addView(status, new LinearLayout.LayoutParams(-1, -2));
-
-        ScrollView scroll = new ScrollView(this);
-        listLayout = new LinearLayout(this);
-        listLayout.setOrientation(LinearLayout.VERTICAL);
-        scroll.addView(listLayout, new ScrollView.LayoutParams(-1, -2));
-        root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1f));
+        TextView warning = new TextView(this);
+        warning.setText("⚠ לפני המיזוג: הפעולה משנה את אנשי הקשר ומוחקת את העותקים לאחר העברת המידע.");
+        warning.setTextSize(13);
+        warning.setTextColor(Color.rgb(120, 70, 0));
+        warning.setGravity(Gravity.RIGHT);
+        warning.setPadding(8, 8, 8, 0);
+        root.addView(warning, new LinearLayout.LayoutParams(-1, -2));
 
         setContentView(root);
+    }
+
+    private TextView card(String heading, String body) {
+        TextView box = new TextView(this);
+        box.setText(heading + "\n" + body);
+        box.setTextSize(15);
+        box.setTextColor(Color.rgb(45, 45, 45));
+        box.setGravity(Gravity.RIGHT);
+        box.setPadding(18, 16, 18, 16);
+        GradientDrawable bg = new GradientDrawable();
+        bg.setColor(Color.WHITE);
+        bg.setCornerRadius(16);
+        bg.setStroke(1, Color.rgb(220, 220, 220));
+        box.setBackground(bg);
+        return box;
+    }
+
+    private void confirmMerge() {
+        if (duplicateGroups.isEmpty()) return;
+
+        new AlertDialog.Builder(this)
+                .setTitle("למזג את כל הכפילויות?")
+                .setMessage("נמצאו " + duplicateGroups.size() + " קבוצות כפולות.\n\n" +
+                        "כל קבוצה תהפוך לאיש קשר אחד. המידע מאנשי הקשר האחרים יועתק לאיש הקשר שנשמר, ולאחר מכן העותקים יימחקו.\n\n" +
+                        "מומלץ לוודא שיש לך גיבוי של אנשי הקשר לפני המשך.")
+                .setNegativeButton("ביטול", null)
+                .setPositiveButton("כן, מזג", new android.content.DialogInterface.OnClickListener() {
+                    @Override public void onClick(android.content.DialogInterface dialog, int which) {
+                        mergeAll();
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -346,23 +415,46 @@ public class MainActivity extends Activity {
         listLayout.removeAllViews();
 
         if (duplicateGroups.isEmpty()) {
-            status.setText("לא נמצאו קבוצות כפולות.");
+            status.setText("✓ לא נמצאו כפילויות");
             mergeButton.setEnabled(false);
+
+            TextView empty = card(
+                    "הכול נקי",
+                    "לא נמצאו כרגע קבוצות של אנשי קשר עם מספר טלפון זהה.\n\n" +
+                    "אם הוספת אנשי קשר חדשים, אפשר ללחוץ שוב על "סרוק ומצא כפילויות"."
+            );
+            listLayout.addView(empty, new LinearLayout.LayoutParams(-1, -2));
             return;
         }
 
-        status.setText("נמצאו " + duplicateGroups.size() + " קבוצות כפולות.");
+        int totalContacts = 0;
+        for (ContactInfo group : duplicateGroups) {
+            totalContacts += group.memberIds.size();
+        }
+
+        status.setText("נמצאו " + duplicateGroups.size() +
+                " קבוצות כפולות (" + totalContacts + " אנשי קשר).");
         mergeButton.setEnabled(true);
+
+        TextView hint = new TextView(this);
+        hint.setText("בדוק את הרשימה. כל שורה היא קבוצה שתמוזג לאיש קשר אחד.");
+        hint.setTextSize(14);
+        hint.setTextColor(Color.DKGRAY);
+        hint.setGravity(Gravity.RIGHT);
+        hint.setPadding(0, 4, 0, 10);
+        listLayout.addView(hint, new LinearLayout.LayoutParams(-1, -2));
 
         int index = 1;
         for (ContactInfo group : duplicateGroups) {
-            TextView row = new TextView(this);
-            row.setText(index + ". " + joinNames(group.memberNames) +
-                    "\nטלפונים: " + joinUniqueNumbers(group.numbers) +
-                    "\nאנשי קשר בקבוצה: " + group.memberIds.size());
-            row.setTextSize(16);
-            row.setPadding(0, 18, 0, 18);
-            listLayout.addView(row, new LinearLayout.LayoutParams(-1, -2));
+            TextView row = card(
+                    "קבוצה " + index + "  •  " + group.memberIds.size() + " אנשי קשר",
+                    "שמות: " + joinNames(group.memberNames) +
+                    "\nמספרים: " + joinUniqueNumbers(group.numbers) +
+                    "\n\n→ בעת המיזוג יישאר איש קשר אחד עם המידע שניתן להעביר מכל הקבוצה."
+            );
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+            lp.setMargins(0, 0, 0, 10);
+            listLayout.addView(row, lp);
             index++;
         }
     }
