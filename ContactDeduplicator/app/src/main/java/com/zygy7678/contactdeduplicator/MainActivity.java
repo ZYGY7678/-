@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity { // merge preview + full-screen scroll
     private static final int REQUEST_CONTACTS = 42;
 
     private final List<ContactInfo> duplicateGroups = new ArrayList<ContactInfo>();
