@@ -58,12 +58,7 @@ public class MainActivity extends Activity {
             startActivity(i);
         }});
         ((Button)findViewById(R.id.aboutButton)).setOnClickListener(new View.OnClickListener(){@Override public void onClick(View v){
-            new AlertDialog.Builder(MainActivity.this).setTitle("אודות").setMessage("נעילת אפליקציות
-
-פותח ע"י חייא שיאומי ממצמחים טופ!
-
-מיועד במיוחד למכשירי Android 4.4.4 ומעלה.
-הנעילה יכולה לעבוד עם שירות נגישות, ובמכשירים ישנים יש גם מנגנון גיבוי.").setPositiveButton("סגור",null).show();
+            new AlertDialog.Builder(MainActivity.this).setTitle("אודות").setMessage("נעילת אפליקציות\\n\\nפותח ע"י חייא שיאומי ממצמחים טופ!\\n\\nמיועד במיוחד למכשירי Android 4.4.4 ומעלה.\\nהנעילה יכולה לעבוד עם שירות נגישות, ובמכשירים ישנים יש גם מנגנון גיבוי.").setPositiveButton("סגור",null).show();
         }});
     }
 
