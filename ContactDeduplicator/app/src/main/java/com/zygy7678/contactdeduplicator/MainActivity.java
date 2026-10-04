@@ -108,19 +108,19 @@ public class MainActivity extends Activity { // merge preview + full-screen scro
         status.setPadding(0, 14, 0, 8);
         root.addView(status, new LinearLayout.LayoutParams(-1, -2));
 
-        ScrollView scroll = new ScrollView(this);
-        scroll.setFillViewport(true);
-        LinearLayout content = new LinearLayout(this);
-        content.setOrientation(LinearLayout.VERTICAL);
-        content.setPadding(0, 0, 0, 8);
-        content.setGravity(Gravity.RIGHT);
-        content.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        // The entire screen is inside one ScrollView.
+        // This is important on small/short devices: title, explanation, results,
+        // merge button and warning must all remain reachable by scrolling.
+        ScrollView screenScroll = new ScrollView(this);
+        screenScroll.setFillViewport(true);
+        screenScroll.setClipToPadding(false);
+        screenScroll.setPadding(0, 0, 0, 8);
 
         listLayout = new LinearLayout(this);
         listLayout.setOrientation(LinearLayout.VERTICAL);
         listLayout.setGravity(Gravity.RIGHT);
         listLayout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        content.addView(listLayout, new LinearLayout.LayoutParams(-1, -2));
+        root.addView(listLayout, new LinearLayout.LayoutParams(-1, -2));
 
         mergeButton = new Button(this);
         mergeButton.setText("🔗  מזג את כל הקבוצות");
@@ -131,7 +131,7 @@ public class MainActivity extends Activity { // merge preview + full-screen scro
                 confirmMerge();
             }
         });
-        content.addView(mergeButton, new LinearLayout.LayoutParams(-1, -2));
+        root.addView(mergeButton, new LinearLayout.LayoutParams(-1, -2));
 
         TextView warning = new TextView(this);
         warning.setText("⚠ לפני המיזוג: הפעולה משנה את אנשי הקשר ומוחקת את העותקים לאחר העברת המידע.");
@@ -139,12 +139,11 @@ public class MainActivity extends Activity { // merge preview + full-screen scro
         warning.setTextColor(Color.rgb(120, 70, 0));
         warning.setGravity(Gravity.RIGHT);
         warning.setPadding(8, 8, 8, 0);
-        content.addView(warning, new LinearLayout.LayoutParams(-1, -2));
+        root.addView(warning, new LinearLayout.LayoutParams(-1, -2));
 
-        scroll.addView(content, new ScrollView.LayoutParams(-1, -2));
-        root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1f));
-
-        setContentView(root);
+        // Root contains ALL UI elements, so even the header can scroll on tiny screens.
+        screenScroll.addView(root, new ScrollView.LayoutParams(-1, -2));
+        setContentView(screenScroll);
     }
 
     private TextView card(String heading, String body) {
