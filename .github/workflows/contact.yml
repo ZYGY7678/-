@@ -2,6 +2,8 @@ name: Contact APK
 on:
   push:
     branches: [contact-deduplicator]
+  pull_request:
+    branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
