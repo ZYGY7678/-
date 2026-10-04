@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#1976D2" />
+            <corners android:radius="18dp" />
+        </shape>
+    </item>
+
+    <!-- Two overlapping contact silhouettes: represents duplicate contacts -->
+    <item
+        android:left="20dp"
+        android:top="18dp"
+        android:right="48dp"
+        android:bottom="46dp">
+        <shape android:shape="oval">
+            <solid android:color="#FFFFFF" />
+        </shape>
+    </item>
+    <item
+        android:left="13dp"
+        android:top="42dp"
+        android:right="55dp"
+        android:bottom="66dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+
+    <item
+        android:left="44dp"
+        android:top="25dp"
+        android:right="68dp"
+        android:bottom="49dp">
+        <shape android:shape="oval">
+            <solid android:color="#E3F2FD" />
+        </shape>
+    </item>
+    <item
+        android:left="38dp"
+        android:top="46dp"
+        android:right="74dp"
+        android:bottom="67dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#E3F2FD" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+
+    <!-- Small check mark hint: cleanup/merge -->
+    <item
+        android:left="51dp"
+        android:top="55dp"
+        android:right="70dp"
+        android:bottom="70dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#43A047" />
+            <corners android:radius="7dp" />
+        </shape>
+    </item>
+</layer-list>
