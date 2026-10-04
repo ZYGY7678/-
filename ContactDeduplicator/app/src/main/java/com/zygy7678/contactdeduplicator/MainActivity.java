@@ -421,7 +421,7 @@ public class MainActivity extends Activity {
             TextView empty = card(
                     "הכול נקי",
                     "לא נמצאו כרגע קבוצות של אנשי קשר עם מספר טלפון זהה.\n\n" +
-                    "אם הוספת אנשי קשר חדשים, אפשר ללחוץ שוב על "סרוק ומצא כפילויות"."
+                    "אם הוספת אנשי קשר חדשים, אפשר ללחוץ שוב על סרוק ומצא כפילויות."
             );
             listLayout.addView(empty, new LinearLayout.LayoutParams(-1, -2));
             return;
