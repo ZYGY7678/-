@@ -53,3 +53,5 @@ jobs:
         with:
           name: AppLocker44-debug
           path: app/build/outputs/apk/debug/app-debug.apk
+
+# Build after accessibility support update
